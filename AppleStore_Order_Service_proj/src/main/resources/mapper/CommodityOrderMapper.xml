@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.macross.AppleStore_Order_Service_proj.mapper.CommodityOrderMapper">
+
+
+<!--    id	int-->
+<!--    out_trade_no	varchar	订单唯一标识-->
+<!--    user_id	int	用户id-->
+<!--    state	int	0表示未支付，1表示已支付-->
+<!--    total_fee	int	支付金额，单位分-->
+<!--    commodity_id	int	商品id-->
+<!--    commodity_describe	varchar	商品描述-->
+<!--    commodity_img	varchar	商品封面图-->
+<!--    create_time	datetime	订单生成时间-->
+<!--    -->
+
+    <insert id="commodityOrder" parameterType="CommodityOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `commodity_order`(`out_trade_no`, `user_id`, `state`, `total_fee`, `commodity_id`, `commodity_describe`, `commodity_img`, `address`, `if_seckill`,`create_time`)
+        VALUES (#{outTradeNo,jdbcType=VARCHAR},
+                #{userId,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER},
+                #{totalFee,jdbcType=DECIMAL},
+                #{commodityId,jdbcType=INTEGER},
+                #{commodityDescribe,jdbcType=VARCHAR},
+                #{commodityImg,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR},
+                #{ifSeckill,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}
+                );
+    </insert>
+
+    <insert id="seckillCommodityOrder" parameterType="CommodityOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `commodity_order`(`out_trade_no`, `user_id`, `state`, `total_fee`, `commodity_id`, `commodity_describe`, `commodity_img`, `address`, `if_seckill`,`seckill_code`,`fail_msg`,`create_time`)
+        VALUES (#{outTradeNo,jdbcType=VARCHAR},
+                #{userId,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER},
+                #{totalFee,jdbcType=DECIMAL},
+                #{commodityId,jdbcType=INTEGER},
+                #{commodityDescribe,jdbcType=VARCHAR},
+                #{commodityImg,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR},
+                #{ifSeckill,jdbcType=INTEGER},
+                #{seckillCode,jdbcType=INTEGER},
+                #{failMsg,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}
+                );
+    </insert>
+
+    <select id="findUserOrder" resultType="CommodityOrder" >
+        SELECT * FROM commodity_order WHERE user_id = 46 AND state = 1 ORDER BY create_time DESC
+    </select>
+
+</mapper>

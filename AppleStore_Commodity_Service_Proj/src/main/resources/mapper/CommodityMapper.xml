@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.macross.AppleStore_Commodity_Service_Proj.mapper.CommodityMapper">
+
+    <select id="homeBanner" resultType="HomeBanner">
+        select * from home_banner order by weight asc LIMIT 4,6
+    </select>
+
+
+    <resultMap id="homeCommodityResultMap" type="CommodityCategory">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+
+        <collection property="commodityList" ofType="Commodity">
+            <id column="commodity_id" jdbcType="INTEGER" property="id"/>
+
+            <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
+            <result column="commodity_describe" jdbcType="VARCHAR" property="describe"/>
+            <result column="home_img" jdbcType="VARCHAR" property="homeImg"/>
+            <result column="price" jdbcType="DECIMAL" property="price"/>
+        </collection>
+
+
+    </resultMap>
+
+
+
+    <select id="homeCommodity" resultMap="homeCommodityResultMap">
+            SELECT
+                cc.id,cc.describe,cc.create_time,
+                c.id AS commodity_id,c.category_id,c.describe AS commodity_describe,c.home_img,c.price
+                FROM commodity_category cc
+                RIGHT JOIN commodity c ON cc.id=c.category_id
+                ORDER BY c.category_id ASC,c.weight DESC
+    </select>
+
+    <resultMap id="CommodityDetailResultMap" type="Commodity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="home_img" jdbcType="VARCHAR" property="homeImg"/>
+        <result column="detail_img" jdbcType="VARCHAR" property="detailImg"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="point" jdbcType="INTEGER" property="point"/>
+
+        <collection property="commodityBannerList" ofType="CommodityBanner">
+            <id column="commodity_banner_id" jdbcType="INTEGER" property="id"/>
+
+            <result column="commodity_id" jdbcType="INTEGER" property="commodityId"/>
+            <result column="img" jdbcType="VARCHAR" property="img"/>
+            <result column="weight" jdbcType="INTEGER" property="weight"/>
+
+        </collection>
+
+    </resultMap>
+
+    <select id="findAllCommodity" resultType="Commodity">
+        select * from commodity
+    </select>
+
+
+    <select id="findCommodityDetail" resultMap="CommodityDetailResultMap">
+        SELECT c.id,c.describe,c.detail_img,c.home_img,c.price,c.point,cb.id AS commodity_banner_id,cb.commodity_id,cb.img,cb.weight
+            FROM commodity c
+            LEFT JOIN commodity_banner cb ON c.id = cb.commodity_id
+            where c.id=#{commodity_id}
+            ORDER BY c.id ASC ,cb.weight ASC
+    </select>
+
+    <select id="findAllSeckillCommodity" resultMap="SeckillCommodityRessultMap">
+        SELECT cs.commodity_id AS id,cs.seckill_price,cs.stock,cs.start_date,cs.end_date,c.price,c.describe,c.home_img
+        FROM commodity_seckill cs
+        LEFT JOIN commodity c ON cs.commodity_id = c.id
+    </select>
+
+    <resultMap id="SeckillCommodityRessultMap" type="Commodity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="seckill_price" jdbcType="INTEGER" property="seckillPrice"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="home_img" jdbcType="VARCHAR" property="homeImg"/>
+        <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
+        <result column="end_date" jdbcType="TIMESTAMP" property="endDate"/>
+    </resultMap>
+
+    <select id="findSeckillCommodityDetail" resultMap="SeckillCommodityDetailResultMap">
+		SELECT
+		a.id,a.describe,a.detail_img,a.home_img,a.price,a.point,
+		b.stock,b.seckill_price,b.start_date,b.end_date,
+		a.commodity_banner_id,a.commodity_id,a.img,a.weight
+		FROM(
+        SELECT c.id,c.describe,c.detail_img,c.home_img,c.price,c.point,cb.id AS commodity_banner_id,cb.commodity_id,cb.img,cb.weight
+        FROM commodity c
+        LEFT JOIN commodity_banner cb ON c.id = cb.commodity_id
+        where c.id=#{commodity_id}
+        ORDER BY c.id ASC ,cb.weight ASC)a
+		LEFT JOIN commodity_seckill b ON a.id = b.commodity_id
+    </select>
+
+    <resultMap id="SeckillCommodityDetailResultMap" type="Commodity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="home_img" jdbcType="VARCHAR" property="homeImg"/>
+        <result column="detail_img" jdbcType="VARCHAR" property="detailImg"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="point" jdbcType="INTEGER" property="point"/>
+
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="seckill_price" jdbcType="DECIMAL" property="seckillPrice"/>
+        <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
+        <result column="end_date" jdbcType="TIMESTAMP" property="endDate"/>
+
+        <collection property="commodityBannerList" ofType="CommodityBanner">
+            <id column="commodity_banner_id" jdbcType="INTEGER" property="id"/>
+
+            <result column="commodity_id" jdbcType="INTEGER" property="commodityId"/>
+            <result column="img" jdbcType="VARCHAR" property="img"/>
+            <result column="weight" jdbcType="INTEGER" property="weight"/>
+
+        </collection>
+
+    </resultMap>
+</mapper>

@@ -1,0 +1,89 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: api-gateway
+  redis:
+    lettuce:
+      pool:
+        max-active: 200
+        max-idle: 20
+        min-idle: 5
+    host: 35.220.144.21
+    port: 6379
+    password: 19981015
+    database: 0
+    master:
+      hostName: 35.220.144.21
+      port: 6379
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 35.220.144.21
+        port: 6379
+        password: "19981015"
+        database: 1
+    slave1:
+      hostName: 35.220.144.21
+      port: 6380
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 35.220.144.21
+        port: 6380
+        password: "19981015"
+        database: 1
+    slave2:
+      hostName: 35.220.144.21
+      port: 6381
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 35.220.144.21
+        port: 6381
+        password: "19981015"
+        database: 1
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    registry-fetch-interval-seconds: 3
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+ribbon:
+  ReadTimeout: 2000
+  ConnectTimeout: 2000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+zuul:
+  routes:
+    appleStore-user-service:
+      path: /apigateway/appleStore-user-service/**
+      serviceId: appleStore-user-service
+    appleStore-commodity-service:
+      path: /apigateway/appleStore-commodity-service/**
+      serviceId: appleStore-commodity-service
+    appleStore-order-service:
+      path: /apigateway/appleStore-order-service/**
+      serviceId: appleStore-order-service
+    appleStore-seckill-service:
+      path: /apigateway/appleStore-seckill-service/**
+      serviceId: appleStore-seckill-service
+  ignored-patterns: /*-service/**

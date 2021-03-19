@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--        id	int-->
+<!--        out_trade_no	varchar	订单唯一标识-->
+<!--        user_id	int	用户id-->
+<!--        state	int	0表示未支付，1表示已支付,默认为0-->
+<!--        total_fee	int	支付金额，单位分-->
+<!--        commodity_id	int	商品id-->
+<!--        commodity_describe	varchar	商品描述-->
+<!--        commodity_img	varchar	商品封面图-->
+<!--        create_time	datetime	订单生成时间-->
+
+<mapper namespace="org.macross.AppleStore_Order_Service_proj.mapper.ShoppingCartOrderMapper">
+
+    <insert id="addToCart" parameterType="ShoppingCartOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `shoppingcart_order`(`out_trade_no`, `user_id`, `state`, `total_fee`, `commodity_id`, `commodity_describe`, `commodity_img`, `create_time`)
+        VALUES (#{outTradeNo,jdbcType=VARCHAR},
+                #{userId,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER},
+                #{totalFee,jdbcType=DECIMAL},
+                #{commodityId,jdbcType=INTEGER},
+                #{commodityDescribe,jdbcType=VARCHAR},
+                #{commodityImg,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}
+                );
+    </insert>
+
+    <select id="findUserCartInfo" resultType="ShoppingCartOrder">
+        SELECT * FROM shoppingcart_order WHERE user_id = #{user_id} AND state = 0 ORDER BY create_time DESC;
+    </select>
+
+    <update id="updateOrderState">
+        UPDATE `shoppingcart_order` SET `state` = 1 WHERE user_id = #{user_id}
+    </update>
+</mapper>

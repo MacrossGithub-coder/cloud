@@ -1,0 +1,102 @@
+server:
+  port: 1016
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: AppleStore-User-Service
+#  zipkin:
+#    base-url: http://112.124.18.163:9411/
+  sleuth:
+    sampler:
+      probability: 1
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-wz9oa6p4h17oz46u1co.mysql.rds.aliyuncs.com/applestore_dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=CTT
+    username: macross
+    password: 19981015@zJh
+  redis:
+    lettuce:
+      pool:
+        max-active: 200
+        max-idle: 20
+        min-idle: 5
+    host: 120.55.41.129
+    port: 6379
+    password: 19981015
+    database: 0
+    master:
+      hostName: 120.55.41.129
+      port: 6379
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 120.55.41.129
+        port: 6379
+        password: "19981015"
+        database: 1
+    slave1:
+      hostName: 120.55.41.129
+      port: 6380
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 120.55.41.129
+        port: 6380
+        password: "19981015"
+        database: 1
+    slave2:
+      hostName: 120.55.41.129
+      port: 6381
+      password: "19981015"
+      database: 0
+      seckill:
+        hostName: 120.55.41.129
+        port: 6381
+        password: "19981015"
+        database: 1
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+AppleStore-User-Service:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 4000
+  hystrix:
+    enabled: true
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#MyBatis
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.macross.AppleStore_Common_Config.model
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.macross.AppleStore_User_Service_Proj.mapper.UserMapper">
+
+<!--             id	int 用户id-->
+<!--             name	varchar	用户名-->
+<!--             pwd	varchar	密码-->
+<!--             head_img	varchar	头像-->
+<!--             phone	varchar	手机号-->
+<!--             account	int	账户金额，单位分-->
+<!--             address	varchar	配送地址-->
+<!--             create_time	datetime	创建时间-->
+
+    <insert id="register" parameterType="User">
+        insert into user(name,pwd,head_img,phone,account,address,create_time)
+        values(#{name,jdbcType=VARCHAR},
+               #{pwd,jdbcType=VARCHAR},
+               #{headImg,jdbcType=VARCHAR},
+               #{phone,jdbcType=VARCHAR},
+               #{account,jdbcType=DECIMAL},
+               #{address,jdbcType=VARCHAR},
+               #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    
+    <select id="login" resultType="User">
+        select * from user where phone = #{phone} and pwd = #{pwd}
+    </select>
+
+    <select id="findUserInfoById" resultType="User">
+        select * from user where id = #{id}
+    </select>
+
+    <update id="UpdateUserAccount">
+        UPDATE `user` SET `account` = #{account} WHERE `id` = #{user_id} AND `account` = #{org_account}
+    </update>
+</mapper>

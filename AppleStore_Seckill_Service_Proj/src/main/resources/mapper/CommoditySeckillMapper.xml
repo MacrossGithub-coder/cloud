@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.macross.AppleStore_Seckill_Service_Proj.mapper.CommoditySeckillMapper">
+
+    <select id="findSeckillOrder" resultType="SeckillOrder">
+        SELECT * FROM seckill_order WHERE user_id = #{user_id} AND commodity_id = #{commodity_id}
+    </select>
+
+    <select id="findStockByCommodityId" resultType="CommoditySeckill" >
+        SELECT * FROM commodity_seckill WHERE commodity_id = #{commodity_id}
+    </select>
+
+    <update id="reduceStock">
+        UPDATE commodity_seckill SET stock = stock-1 WHERE commodity_id = #{commodity_id} AND stock >0
+    </update>
+
+    <insert id="commoditySeckillOrder" parameterType="SeckillOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `seckill_order`(`user_id`, `commodity_id`, `order_id`)
+        VALUES (#{userId,jdbcType=INTEGER},
+                #{commodityId,jdbcType=INTEGER},
+                #{orderId,jdbcType=INTEGER})
+    </insert>
+
+    <select id="findSeckillResult" resultType="CommodityOrder">
+        SELECT `seckill_code`,`fail_msg` FROM commodity_order
+        WHERE out_trade_no = #{out_trade_no}
+    </select>
+
+    <insert id="seckillCommodityOrderWithFail" parameterType="CommodityOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `commodity_order`(`out_trade_no`, `user_id`, `state`, `total_fee`, `commodity_id`, `commodity_describe`, `commodity_img`, `address`, `if_seckill`,`seckill_code`,`fail_msg`,`create_time`)
+        VALUES (#{outTradeNo,jdbcType=VARCHAR},
+                #{userId,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER},
+                #{totalFee,jdbcType=DECIMAL},
+                #{commodityId,jdbcType=INTEGER},
+                #{commodityDescribe,jdbcType=VARCHAR},
+                #{commodityImg,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR},
+                #{ifSeckill,jdbcType=INTEGER},
+                #{seckillCode,jdbcType=INTEGER},
+                #{failMsg,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}
+                );
+    </insert>
+</mapper>
