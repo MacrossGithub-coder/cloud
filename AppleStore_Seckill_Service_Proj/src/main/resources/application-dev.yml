@@ -73,6 +73,8 @@ spring:
     virtual-host: /dev
     username: dev
     password: 19981015
+#    publisher-confirms: true
+    publisher-returns: true
     listener:
       simple:
         acknowledge-mode: manual

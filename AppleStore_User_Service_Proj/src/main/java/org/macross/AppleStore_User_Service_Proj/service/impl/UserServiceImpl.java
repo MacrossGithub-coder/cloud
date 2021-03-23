@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
      * 随机头像
      */
     private static final String[] headImg = {
-            "http://112.124.18.163/macross/img/a.jpg",
+            "http://120.55.41.129/macross/img/a.jpg",
     };
 
     private String getRandomImg() {

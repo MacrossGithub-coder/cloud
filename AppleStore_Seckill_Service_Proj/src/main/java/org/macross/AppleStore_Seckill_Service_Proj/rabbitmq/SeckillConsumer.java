@@ -39,17 +39,18 @@ public class SeckillConsumer {
         SeckillMessage seckillMessage = objectMapper.readValue(data.getBytes(), SeckillMessage.class);
         CommoditySeckill commoditySeckill = commoditySeckillMapper.findStockByCommodityId(seckillMessage.getCommodityId());
         if (commoditySeckill.getStock() < 0) {
+            log.info("商品库存不足。");
             return;
         }
 
         SeckillOrder seckillOrder = commoditySeckillMapper.findSeckillOrder(seckillMessage.getUserId(), seckillMessage.getCommodityId());
         //双重检测
         if (seckillOrder != null) {
+            log.info("用户存在重复下单行为。");
             return;
         }
         try {
             commoditySeckillService.doSeckillService(seckillMessage,commoditySeckill);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         }catch (Exception e){
             log.error("Consumer1处理消息异常，消息重新回到队列");
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
