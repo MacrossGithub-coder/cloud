@@ -190,6 +190,14 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         return value.equals(CommonsUtils.MD5(path));
     }
 
+
+    private static final Integer ZERO = 0;
+    /**
+     * return orderId 订单0表示秒杀失败
+     * @param seckillMessage
+     * @param commoditySeckill
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     public int seckillCommodityOrder(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) {
 
@@ -208,7 +216,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreUserService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
-            return 0;
+            return ZERO;
         }
 
         try {
@@ -222,7 +230,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreCommodityService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
-            return 0;
+            return ZERO;
         }
 
 
@@ -235,7 +243,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.INSUFFICIENT_BALANCE);
             commodityOrder.setFailMsg("当前用户:" + seckillMessage.getUserId() + "余额不足");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
-            return 0;
+            return ZERO;
         }
 
         JsonData resultData;
@@ -255,7 +263,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreOrderService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
-            return 0;
+            return ZERO;
         }
 
         //修改账户余额
@@ -264,7 +272,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         if (result1 + result2 == 0) {
             return (Integer) resultData.getData();
         }
-        return 0;
+        return ZERO;
     }
 
 
