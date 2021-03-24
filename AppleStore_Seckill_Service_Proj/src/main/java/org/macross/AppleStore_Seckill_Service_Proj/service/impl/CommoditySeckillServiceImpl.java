@@ -178,7 +178,9 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         String key = "path:" + userId + ":" + commodityId;
         String value = CommonsUtils.MD5(str);
         if (value == null) return null;
-        redisTemplate.opsForValue().set(key, value, 60 * 10L, TimeUnit.SECONDS);
+        //redisTemplate.opsForValue().set(key, value, 60 * 10L, TimeUnit.SECONDS);
+        //测试使用的SeckillPath,ttl=7Days
+        redisTemplate.opsForValue().set(key, value, 60 * 60 *24 *7L, TimeUnit.SECONDS);
         return str;
     }
 
