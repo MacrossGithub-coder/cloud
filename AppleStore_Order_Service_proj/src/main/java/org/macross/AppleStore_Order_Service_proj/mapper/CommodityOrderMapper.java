@@ -11,5 +11,5 @@ public interface CommodityOrderMapper {
 
     int seckillCommodityOrder(CommodityOrder commodityOrder);
 
-    List<CommodityOrder> findUserOrder(@Param("user_id") Integer userId);
+    List<CommodityOrder> findUserOrder(@Param("userId") Integer userId);
 }

@@ -48,7 +48,7 @@
     </insert>
 
     <select id="findUserOrder" resultType="CommodityOrder" >
-        SELECT * FROM commodity_order WHERE user_id = 46 AND state = 1 ORDER BY create_time DESC
+        SELECT * FROM commodity_order WHERE user_id = #{userId} AND state = 1 ORDER BY create_time DESC
     </select>
 
 </mapper>
