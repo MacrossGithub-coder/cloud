@@ -6,3 +6,11 @@
     112.124.18.163:6379(主) 
     112.124.18.163:6380(从) 
     112.124.18.163:6381(从)
+* 内网穿透访问
+  * AppleStore：http://120.55.41.129:10003
+  * 注册中心Eureka：http://120.55.41.129:10001/
+  * Swagger网关文档：http://120.55.41.129:10002/swagger-ui.html
+
+![](https://macross-img-bucket.oss-cn-shenzhen.aliyuncs.com/image/image-20210409162857719.png)
+
+![image-20210409162451354](https://macross-img-bucket.oss-cn-shenzhen.aliyuncs.com/image/image-20210409162451354.png)
