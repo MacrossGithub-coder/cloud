@@ -29,7 +29,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -249,7 +248,8 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             log.error(e.getMessage(), e);
             userInfo.setId(seckillMessage.getUserId());
             commodityDetail.setId(commoditySeckill.getCommodityId());
-            CommodityOrder commodityOrder = fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
+            CommodityOrder commodityOrder = new CommodityOrder();
+            commodityOrder.fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
             commodityOrder.setState(0);
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreUserService出现异常");
@@ -263,7 +263,8 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             commodityDetail.setId(commoditySeckill.getCommodityId());
-            CommodityOrder commodityOrder = fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
+            CommodityOrder commodityOrder = new CommodityOrder();
+            commodityOrder.fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
             commodityOrder.setState(0);
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreCommodityService出现异常");
@@ -276,7 +277,8 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         BigDecimal finalAccount = orgAccount.subtract(commoditySeckill.getSeckillPrice());
 
         if (finalAccount.signum() == -1) {
-            CommodityOrder commodityOrder = fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
+            CommodityOrder commodityOrder = new CommodityOrder();
+            commodityOrder.fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
             commodityOrder.setState(0);
             commodityOrder.setSeckillCode(SeckillConstant.INSUFFICIENT_BALANCE);
             commodityOrder.setFailMsg("当前用户:" + seckillMessage.getUserId() + "余额不足");
@@ -288,7 +290,8 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         Integer result1;
         Integer result2;
 
-        CommodityOrder commodityOrder = fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
+        CommodityOrder commodityOrder = new CommodityOrder();
+        commodityOrder.fillSeckillOrder(userInfo, commoditySeckill, commodityDetail, seckillMessage.getOutTradeNo());
         commodityOrder.setSeckillCode(0);
 
         try {
@@ -311,22 +314,5 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             return (Integer) resultData.getData();
         }
         return ZERO;
-    }
-
-
-    private CommodityOrder fillSeckillOrder(User userInfo, CommoditySeckill commoditySeckill, Commodity commodityDetail, String outTradeNo) {
-
-        CommodityOrder commodityOrder = new CommodityOrder();
-        commodityOrder.setOutTradeNo(outTradeNo);
-        commodityOrder.setUserId(userInfo.getId());
-        commodityOrder.setState(1);
-        commodityOrder.setTotalFee(commoditySeckill.getSeckillPrice());
-        commodityOrder.setCommodityId(commodityDetail.getId());
-        commodityOrder.setCommodityDescribe("[秒杀价]" + commodityDetail.getDescribe());
-        commodityOrder.setCommodityImg(commodityDetail.getHomeImg());
-        commodityOrder.setAddress(userInfo.getAddress());
-        commodityOrder.setIfSeckill(1);
-        commodityOrder.setCreateTime(new Date());
-        return commodityOrder;
     }
 }

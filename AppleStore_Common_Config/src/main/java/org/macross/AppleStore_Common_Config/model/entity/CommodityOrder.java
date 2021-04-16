@@ -66,4 +66,16 @@ public class CommodityOrder {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
+    public void fillSeckillOrder(User userInfo, CommoditySeckill commoditySeckill, Commodity commodityDetail, String outTradeNo) {
+        this.outTradeNo = outTradeNo;
+        this.userId = userInfo.getId();
+        this.state = 1;
+        this.totalFee = commoditySeckill.getSeckillPrice();
+        this.commodityId = commodityDetail.getId();
+        this.commodityDescribe = "[秒杀价]" + commodityDetail.getDescribe();
+        this.commodityImg = commodityDetail.getHomeImg();
+        this.address = userInfo.getAddress();
+        this.ifSeckill = 1;
+        this.createTime = new Date();
+    }
 }
