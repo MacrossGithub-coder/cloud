@@ -23,7 +23,7 @@
     </insert>
 
     <select id="findSeckillResult" resultType="CommodityOrder">
-        SELECT `seckill_code`,`fail_msg` FROM commodity_order
+        SELECT * FROM commodity_order
         WHERE out_trade_no = #{out_trade_no}
     </select>
 

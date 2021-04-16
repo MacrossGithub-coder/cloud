@@ -14,7 +14,7 @@ import org.macross.AppleStore_Seckill_Service_Proj.rabbitmq.SeckillMessage;
 public interface CommoditySeckillService {
     JsonData doCommoditySeckill(Integer commodityId, Integer userId) throws JsonProcessingException;
 
-    void doSeckillService(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill);
+    void doSeckillService(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) throws JsonProcessingException;
 
     int getSeckillResult(Integer commodityId, Integer userId, String outTradeNo);
 

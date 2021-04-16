@@ -119,7 +119,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void doSeckillService(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) {
+    public void doSeckillService(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) throws JsonProcessingException {
 
         int state = commoditySeckillMapper.reduceStock(commoditySeckill.getCommodityId());
         if (state < 0) {
@@ -236,7 +236,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public int seckillCommodityOrder(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) {
+    public int seckillCommodityOrder(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         User userInfo = new User();
@@ -254,6 +254,9 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreUserService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
+            //异常的seckillMessage添加到mq中
+            String message = objectMapper.writeValueAsString(seckillMessage);
+            rabbitTemplate.convertAndSend("exception_queue", message);
             return ZERO;
         }
 
@@ -269,6 +272,9 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreCommodityService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
+            //异常的seckillMessage添加到mq中
+            String message = objectMapper.writeValueAsString(seckillMessage);
+            rabbitTemplate.convertAndSend("exception_queue", message);
             return ZERO;
         }
 
@@ -304,6 +310,9 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
             commodityOrder.setSeckillCode(SeckillConstant.EXCEPTION);
             commodityOrder.setFailMsg("AppleStoreOrderService出现异常");
             commoditySeckillMapper.seckillCommodityOrderWithFail(commodityOrder);
+            //异常的seckillMessage添加到mq中
+            String message = objectMapper.writeValueAsString(seckillMessage);
+            rabbitTemplate.convertAndSend("exception_queue", message);
             return ZERO;
         }
 

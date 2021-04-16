@@ -82,6 +82,14 @@ spring:
     sentinel:
       transport:
         dashboard: localhost:8080
+  #Mail
+  mail:
+    host: smtp.163.com
+    port: 25
+    protocol: smtp
+    username: macross_af@163.com
+    password: WTWSUBPXBJLSVOCX
+    default-encoding: UTF-8
 
 AppleStore-Seckill-Service:
   ribbon:

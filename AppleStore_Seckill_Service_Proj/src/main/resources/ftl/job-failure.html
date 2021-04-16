@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<head>
+    <title>${subject!}</title>
+    <link rel="stylesheet" href="../layui/css/layui.css"/>
+    <script type="text/javascript" src="../static/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/layui/jquery-3.5.1.min.js"></script>
+    <style>
+        th
+        {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<div style="line-height: 180%;">
+    您好管理员：<br>
+    AppleStore微服务系统出现异常，详细信息如下：
+
+    <table class="layui-table" border="1">
+
+        <thead>
+        <tr>
+            <th>id</th>
+            <td>${id!}</td>
+        </tr>
+        <tr>
+            <th>outTradeNo</th>
+            <td>${outTradeNo!}</td>
+        </tr>
+        <tr>
+            <th>userId</th>
+            <td>${userId!}</td>
+        </tr>
+        <tr>
+            <th>state</th>
+            <td>${state!}</td>
+        </tr>
+        <tr>
+            <th>totalFee</th>
+            <td>${totalFee!}</td>
+        </tr>
+        <tr>
+            <th>commodityId</th>
+            <td>${commodityId!}</td>
+        </tr>
+        <tr>
+            <th>commodityDescribe</th>
+            <td>${commodityDescribe!}</td>
+        </tr>
+        <tr>
+            <th>commodityImg</th>
+            <td>${commodityImg!}</td>
+        </tr>
+        <tr>
+            <th>ifSeckill</th>
+            <td>${ifSeckill!}</td>
+        </tr>
+        <tr>
+            <th>failMsg</th>
+            <td>${failMsg!}</td>
+        </tr>
+        <tr>
+            <th>createTime</th>
+            <td>${(createTime?string('yyyy-MM-dd HH:mm:ss'))!}</td>
+        </tr>
+        </thead>
+
+    </table>
+</div>
+</body>
+</html>
