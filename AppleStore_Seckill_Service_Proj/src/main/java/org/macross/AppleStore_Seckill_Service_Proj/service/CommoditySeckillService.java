@@ -21,4 +21,6 @@ public interface CommoditySeckillService {
     String createSeckillPath(Integer commodityId, Integer userId);
 
     boolean confirmPathValid(String key,String path);
+
+    boolean resetDatabase() throws Exception;
 }

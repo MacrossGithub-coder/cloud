@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.macross.AppleStore_Common_Config.model.entity.*;
 import org.macross.AppleStore_Common_Config.model.request.UpdateAccountRequest;
 import org.macross.AppleStore_Common_Config.utils.JsonData;
@@ -15,6 +17,7 @@ import org.macross.AppleStore_Seckill_Service_Proj.mapper.CommoditySeckillMapper
 import org.macross.AppleStore_Seckill_Service_Proj.rabbitmq.SeckillMessage;
 import org.macross.AppleStore_Seckill_Service_Proj.service.CommoditySeckillService;
 import org.macross.AppleStore_Seckill_Service_Proj.utils.CommonsUtils;
+import org.macross.AppleStore_Seckill_Service_Proj.utils.YmlUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -190,6 +197,35 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         String value = (String) redisSlave2Template.opsForValue().get(key);
         if (value == null) return false;
         return value.equals(CommonsUtils.MD5(path));
+    }
+
+    @Override
+    public boolean resetDatabase() throws Exception {
+        //Reset redis database
+        redisTemplate.opsForValue().set("21",50);
+
+        //Truncate table & reset commodity stock
+        Map<String, String> datasource = YmlUtils.getYmlByFileName("D:\\Users\\i_zhangjiancheng\\IdeaProjects\\cloud\\AppleStore_Seckill_Service_Proj\\src\\main\\resources\\application-dev.yml", "spring", "datasource");
+        Connection conn;
+        if (datasource!=null){
+            String url = datasource.get("spring.datasource.url");
+            String username = datasource.get("spring.datasource.username");
+            String password = datasource.get("spring.datasource.password");
+            try {
+                conn = DriverManager.getConnection(url,username,password);
+            } catch (SQLException throwable) {
+                throw new Exception(throwable.getMessage());
+            }
+        }else {
+            return false;
+        }
+        ScriptRunner runner = new ScriptRunner(conn);
+        runner.setErrorLogWriter(null);
+        runner.setLogWriter(null);
+        runner.runScript(Resources.getResourceAsReader("scripts/seckill.sql"));
+        conn.close();
+        log.info("=======Reset Database Success=======");
+        return true;
     }
 
 

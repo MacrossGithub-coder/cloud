@@ -96,4 +96,10 @@ public class CommoditySeckillController {
         }
         return JsonData.buildSuccess(0,"商品秒杀成功，订单号为：" + result);
     }
+
+    @RequestMapping(value = "reset_database",method = RequestMethod.GET)
+    public JsonData resetDatabase() throws Exception {
+        boolean result = commoditySeckillService.resetDatabase();
+        return result ? JsonData.buildSuccess("Success"):JsonData.buildError("Error");
+    }
 }
