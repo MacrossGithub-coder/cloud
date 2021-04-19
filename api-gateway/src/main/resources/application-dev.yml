@@ -87,3 +87,5 @@ zuul:
       path: /apigateway/appleStore-seckill-service/**
       serviceId: appleStore-seckill-service
   ignored-patterns: /*-service/**
+  semaphore:
+    max-semaphores: 60000
