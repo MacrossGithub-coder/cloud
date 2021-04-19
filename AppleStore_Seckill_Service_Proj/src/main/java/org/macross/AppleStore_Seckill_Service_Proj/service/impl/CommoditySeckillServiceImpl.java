@@ -204,7 +204,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         redisTemplate.opsForValue().set("21",50);
 
         //Truncate table & reset commodity stock
-        Map<String, String> datasource = YmlUtils.getYmlByFileName("D:\\Users\\i_zhangjiancheng\\IdeaProjects\\cloud\\AppleStore_Seckill_Service_Proj\\src\\main\\resources\\application-dev.yml", "spring", "datasource");
+        Map<String, String> datasource = YmlUtils.getYmlByFileName("classpath:application-dev.yml", "spring", "datasource");
         Connection conn;
         if (datasource!=null){
             String url = datasource.get("spring.datasource.url");
