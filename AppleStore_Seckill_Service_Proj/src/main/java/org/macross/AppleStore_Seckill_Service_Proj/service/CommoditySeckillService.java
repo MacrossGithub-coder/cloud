@@ -15,12 +15,4 @@ public interface CommoditySeckillService {
     JsonData doCommoditySeckill(Integer commodityId, Integer userId) throws JsonProcessingException;
 
     void doSeckillService(SeckillMessage seckillMessage, CommoditySeckill commoditySeckill) throws JsonProcessingException;
-
-    int getSeckillResult(Integer commodityId, Integer userId, String outTradeNo);
-
-    String createSeckillPath(Integer commodityId, Integer userId);
-
-    boolean confirmPathValid(String key,String path);
-
-    boolean resetDatabase() throws Exception;
 }

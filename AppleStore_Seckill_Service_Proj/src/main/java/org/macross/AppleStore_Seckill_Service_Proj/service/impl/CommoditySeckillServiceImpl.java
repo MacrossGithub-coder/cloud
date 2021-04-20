@@ -3,9 +3,6 @@ package org.macross.AppleStore_Seckill_Service_Proj.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.macross.AppleStore_Common_Config.model.entity.*;
 import org.macross.AppleStore_Common_Config.model.request.UpdateAccountRequest;
 import org.macross.AppleStore_Common_Config.utils.JsonData;
@@ -16,8 +13,6 @@ import org.macross.AppleStore_Seckill_Service_Proj.config.SeckillConstant;
 import org.macross.AppleStore_Seckill_Service_Proj.mapper.CommoditySeckillMapper;
 import org.macross.AppleStore_Seckill_Service_Proj.rabbitmq.SeckillMessage;
 import org.macross.AppleStore_Seckill_Service_Proj.service.CommoditySeckillService;
-import org.macross.AppleStore_Seckill_Service_Proj.utils.CommonsUtils;
-import org.macross.AppleStore_Seckill_Service_Proj.utils.YmlUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,10 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +66,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
     private static final int ADD_QUEUE = 0;
 
     private static final String COMMODITY_OVER = "commodity_over:";
+    private static final Integer ZERO = 0;
 
     /**
      * @param commodityId
@@ -140,96 +132,7 @@ public class CommoditySeckillServiceImpl implements CommoditySeckillService {
         commoditySeckillMapper.commoditySeckillOrder(seckillOrder);
     }
 
-    /**
-     * -1 ：商品库存不足
-     *  0 ：排队中，继续轮询
-     * -2 : 用户余额不足
-     * -3 : 秒杀过程中出现异常，从Redis缓存中取出相关信息，页面返回活动火爆
-     * 秒杀成功，返回订单ID
-     */
-    @Override
-    public int getSeckillResult(Integer commodityId, Integer userId, String outTradeNo) {
-
-        SeckillOrder seckillOrder = commoditySeckillMapper.findSeckillOrder(userId, commodityId);
-        if (seckillOrder != null) {
-            return seckillOrder.getOrderId();
-        }
-
-        //查看用户是否余额不足或者系统异常
-        CommodityOrder commodityOrder = commoditySeckillMapper.findSeckillResult(outTradeNo);
-        if (!ObjectUtils.isEmpty(commodityOrder)) {
-            if (SeckillConstant.INSUFFICIENT_BALANCE.equals(commodityOrder.getSeckillCode())) {
-                log.error(commodityOrder.getFailMsg());
-                return SeckillConstant.INSUFFICIENT_BALANCE;
-            }
-            if (SeckillConstant.EXCEPTION.equals(commodityOrder.getSeckillCode())) {
-                log.error(commodityOrder.getFailMsg());
-                return SeckillConstant.EXCEPTION;
-            }
-        }
-
-        //查看商品是否被秒杀完
-        Boolean isOver = redisSlave2Template.hasKey(COMMODITY_OVER + commodityId);
-        if (isOver != null && isOver) {
-            return SeckillConstant.OUT_OF_STOCK;
-        }
-        return SeckillConstant.IN_QUEUE;
-    }
-
-    @Override
-    public String createSeckillPath(Integer commodityId, Integer userId) {
-        String str = UUID.randomUUID().toString();
-
-        //Redis:{key:"path:userId:commodityId,Value:str}
-        String key = "path:" + userId + ":" + commodityId;
-        String value = CommonsUtils.MD5(str);
-        if (value == null) return null;
-        //redisTemplate.opsForValue().set(key, value, 60 * 10L, TimeUnit.SECONDS);
-        //测试使用的SeckillPath,ttl=7Days
-        redisTemplate.opsForValue().set(key, value, 60 * 60 *24 *7L, TimeUnit.SECONDS);
-        return str;
-    }
-
-    @Override
-    public boolean confirmPathValid(String key, String path) {
-
-        String value = (String) redisSlave2Template.opsForValue().get(key);
-        if (value == null) return false;
-        return value.equals(CommonsUtils.MD5(path));
-    }
-
-    @Override
-    public boolean resetDatabase() throws Exception {
-        //Reset redis database
-        redisTemplate.opsForValue().set("21",50);
-
-        //Truncate table & reset commodity stock
-        Map<String, String> datasource = YmlUtils.getYmlByFileName("classpath:application-dev.yml", "spring", "datasource");
-        Connection conn;
-        if (datasource!=null){
-            String url = datasource.get("spring.datasource.url");
-            String username = datasource.get("spring.datasource.username");
-            String password = datasource.get("spring.datasource.password");
-            try {
-                conn = DriverManager.getConnection(url,username,password);
-            } catch (SQLException throwable) {
-                throw new Exception(throwable.getMessage());
-            }
-        }else {
-            return false;
-        }
-        ScriptRunner runner = new ScriptRunner(conn);
-        runner.setErrorLogWriter(null);
-        runner.setLogWriter(null);
-        runner.runScript(Resources.getResourceAsReader("scripts/seckill.sql"));
-        conn.close();
-        log.info("=======Reset Database Success=======");
-        return true;
-    }
-
-
-    private static final Integer ZERO = 0;
-    /**
+   /**
      * return orderId 订单0表示秒杀失败
      * @param seckillMessage
      * @param commoditySeckill

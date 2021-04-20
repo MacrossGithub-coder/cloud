@@ -8,6 +8,8 @@ import org.macross.AppleStore_Seckill_Service_Proj.annotation.DistributeLimitAnn
 import org.macross.AppleStore_Seckill_Service_Proj.enums.SeckillResultEnum;
 import org.macross.AppleStore_Seckill_Service_Proj.lua.DistributedLock;
 import org.macross.AppleStore_Seckill_Service_Proj.service.CommoditySeckillService;
+import org.macross.AppleStore_Seckill_Service_Proj.service.SeckillPathService;
+import org.macross.AppleStore_Seckill_Service_Proj.service.SeckillResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +22,16 @@ import java.util.UUID;
 public class CommoditySeckillController {
 
     @Autowired
+    DistributedLock distributedLock;
+
+    @Autowired
     CommoditySeckillService commoditySeckillService;
 
     @Autowired
-    DistributedLock distributedLock;
+    SeckillResultService seckillResultService;
+
+    @Autowired
+    SeckillPathService seckillPathService;
 
     private static String LUA_DISTRIBUTE_LOCK_PRE = "DistributeLock-";
 
@@ -41,7 +49,7 @@ public class CommoditySeckillController {
         log.info("Receive Request get_path, param:[userId = {},commodityId = {}]", userId, commonRequest.getCommodity_id());
         //验证验证码
         //TODO
-        String path = commoditySeckillService.createSeckillPath(commonRequest.getCommodity_id(), userId);
+        String path = seckillPathService.createSeckillPath(commonRequest.getCommodity_id(), userId);
         return path != null ? JsonData.buildSuccess(path) : JsonData.buildError("获取Path失败");
     }
 
@@ -67,7 +75,7 @@ public class CommoditySeckillController {
         }
         //Redis:{key:"path:userId:commodityId,Value:str}
         String key = "path:" + userId + ":" + commonRequest.getCommodity_id();
-        boolean valid = commoditySeckillService.confirmPathValid(key, path);
+        boolean valid = seckillPathService.confirmPathValid(key, path);
         if (!valid) return JsonData.buildError(-3, "秒杀Path有误！");
         return commoditySeckillService.doCommoditySeckill(commonRequest.getCommodity_id(), userId);
     }
@@ -87,7 +95,7 @@ public class CommoditySeckillController {
     public JsonData getSeckillResult(@RequestBody CommonRequest commonRequest, HttpServletRequest request) {
         Integer userId = Integer.parseInt(request.getHeader("user_id"));
         log.info("Receive Request getSeckillResult param:[userId = {},commodityId = {},outTradeNo = {}]", userId, commonRequest.getCommodity_id(), commonRequest.getOut_trade_no());
-        int result = commoditySeckillService.getSeckillResult(commonRequest.getCommodity_id(), userId, commonRequest.getOut_trade_no());
+        int result = seckillResultService.getSeckillResult(commonRequest.getCommodity_id(), userId, commonRequest.getOut_trade_no());
         //异常情况
         if (result <= 0) {
             SeckillResultEnum seckillResultEnum = SeckillResultEnum.getSeckillResultEnum(result);
@@ -99,7 +107,7 @@ public class CommoditySeckillController {
 
     @RequestMapping(value = "reset_database",method = RequestMethod.GET)
     public JsonData resetDatabase() throws Exception {
-        boolean result = commoditySeckillService.resetDatabase();
+        boolean result = seckillResultService.resetDatabase();
         return result ? JsonData.buildSuccess("Success"):JsonData.buildError("Error");
     }
 }
