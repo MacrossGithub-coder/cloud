@@ -62,4 +62,11 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: org.macross.AppleStore_Common_Config.model
 
-
+aliyun:
+  oss:
+    endpoint: http://oss-cn-shenzhen.aliyuncs.com
+    accesskeyid: LTAI5tBW7V6q9oRqzJ5AkE9p
+    accesskeysecret: wVZtz03gAaDsaeO0XUlhItdkVKJDEf
+    bucketname: macross-img-bucket
+    path: image/
+    region: oss-cn-shenzhen.aliyuncs.com

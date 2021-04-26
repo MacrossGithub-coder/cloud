@@ -92,4 +92,8 @@ class AppleStoreSeckillServiceProjApplicationTests {
 
     }
 
+    @Test
+    public void testCommoditySeckill(){
+    }
+
 }

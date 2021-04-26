@@ -52,6 +52,7 @@ public class SeckillResultServiceImpl implements SeckillResultService {
     public RabbitTemplate rabbitTemplate;
 
     private static final String COMMODITY_OVER = "commodity_over:";
+
     /**
      * @param commodityId
      * @param userId

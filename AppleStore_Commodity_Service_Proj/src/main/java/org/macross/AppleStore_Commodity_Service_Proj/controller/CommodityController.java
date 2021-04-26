@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -66,7 +68,12 @@ public class CommodityController {
         return commodity != null ? JsonData.buildSuccess(commodity) : JsonData.buildError("查询失败");
     }
 
-
+    @RequestMapping(value = "upload_image")
+    public JsonData uploadImage(HttpServletRequest request) throws IOException {
+        log.info("Receive uploadImage request");
+        List<String> result = commodityService.uploadImage(request);
+        return new JsonData(0,result,"UploadImage Success");
+    }
 
     public JsonData exceptionHandler(BlockException e){
 //        log.error("当前访问用户过多，接口已做限流处理");
