@@ -69,14 +69,14 @@ public class CommodityController {
     }
 
     @RequestMapping(value = "upload_image")
-    public JsonData uploadImage(HttpServletRequest request) throws IOException {
-        log.info("Receive uploadImage request");
+    public JsonData uploadImageToAliyun(HttpServletRequest request) throws IOException {
+        log.info("Receive uploadImageToAliyun request");
         List<String> result = commodityService.uploadImage(request);
         return new JsonData(0,result,"UploadImage Success");
     }
 
     public JsonData exceptionHandler(BlockException e){
-//        log.error("当前访问用户过多，接口已做限流处理");
+        //log.error("当前访问用户过多，接口已做限流处理");
         return JsonData.buildError("当前访问用户过多，接口已做限流处理，请稍后重试");
     }
 }

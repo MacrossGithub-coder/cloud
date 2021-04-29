@@ -36,7 +36,9 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     CommodityMapper commodityMapper;
 
-    //阿里云OSS配置
+    /**
+     * AliyunOSS config
+     */
     @Value("${aliyun.oss.endpoint}")
     private String ENDPOINT;
 
@@ -160,7 +162,7 @@ public class CommodityServiceImpl implements CommodityService {
             ossClient.shutdown();
             String path = BUCKETNAME+"."+ REGION + "/" + PATH + filename;
             list.add(path);
-            log.info("图片上传阿里云 name=" +  filename +",url = "+path);
+            log.info("UploadImage To Aliyun OSS Success,name=" +  filename +",url = "+path);
         }
         return list;
     }
