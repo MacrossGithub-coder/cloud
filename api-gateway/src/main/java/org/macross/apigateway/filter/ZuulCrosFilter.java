@@ -39,7 +39,8 @@ public class ZuulCrosFilter extends ZuulFilter {
         HttpServletResponse response = context.getResponse();
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT");
-        response.setHeader("Access-Control-Allow-Headers","DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,token");
+        response.setHeader("Access-Control-Allow-Headers","DNT,User-Agent,X-Requested-With," +
+                "If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,token");
         response.setHeader("Access-Control-Expose-headers","token");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

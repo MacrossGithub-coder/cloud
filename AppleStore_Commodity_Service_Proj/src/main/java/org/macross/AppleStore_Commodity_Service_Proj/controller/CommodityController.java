@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -73,6 +74,19 @@ public class CommodityController {
         log.info("Receive uploadImageToAliyun request");
         List<String> result = commodityService.uploadImage(request);
         return new JsonData(0,result,"UploadImage Success");
+    }
+
+    @RequestMapping(value = "upload_image_test",method = RequestMethod.POST)
+    public JsonData uploadImageTest(HttpServletRequest request) throws IOException {
+        log.info("Receive upload_image_test request");
+        BufferedReader br = request.getReader();
+        String str, wholeStr = "";
+        while((str = br.readLine()) != null){
+            wholeStr += str;
+        }
+        System.out.println(wholeStr);
+//        System.out.println("========="+imageRequest.getSrc()+"=========");
+        return new JsonData(0,"test","UploadImage Test");
     }
 
     public JsonData exceptionHandler(BlockException e){
