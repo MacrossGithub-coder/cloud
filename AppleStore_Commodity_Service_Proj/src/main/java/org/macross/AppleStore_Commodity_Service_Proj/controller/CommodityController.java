@@ -3,9 +3,6 @@ package org.macross.AppleStore_Commodity_Service_Proj.controller;
 import com.alibaba.csp.sentinel.EntryType;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.macross.AppleStore_Commodity_Service_Proj.service.CommodityService;
 import org.macross.AppleStore_Common_Config.model.entity.Commodity;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -77,22 +73,6 @@ public class CommodityController {
         log.info("Receive uploadImageToAliyun request");
         List<String> result = commodityService.uploadImage(request);
         return new JsonData(0,result,"UploadImage Success");
-    }
-
-    @RequestMapping(value = "upload_image_test",method = RequestMethod.POST)
-    public JsonData uploadImageTest(HttpServletRequest request) throws IOException {
-        log.info("Receive upload_image_test request");
-        BufferedReader br = request.getReader();
-        String str, wholeStr = "";
-        while((str = br.readLine()) != null){
-            wholeStr += str;
-        }
-        JsonObject obj = new Gson().fromJson(wholeStr, JsonObject.class);
-        JsonArray current_data = obj.get("current_data").getAsJsonArray();
-        JsonObject jsonElement = current_data.get(0).getAsJsonObject();
-        String index = jsonElement.get("value").getAsJsonObject().get("index").getAsString();
-        System.out.println(index);
-        return new JsonData(0,"test","UploadImage Test");
     }
 
     public JsonData exceptionHandler(BlockException e){
