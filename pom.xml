@@ -43,6 +43,7 @@
         <spring-cloud-starter-openfeign>2.2.0.RELEASE</spring-cloud-starter-openfeign>
         <springfox-swagger2>2.9.2</springfox-swagger2>
         <springfox-swagger-ui>2.9.2</springfox-swagger-ui>
+        <spring-boot-starter-data-mongodb>2.4.0</spring-boot-starter-data-mongodb>
     </properties>
 
     <!-- 子模块继承之后，提供作用：锁定版本 + 子module不用写groupId和version -->
@@ -118,6 +119,11 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${springfox-swagger-ui}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-mongodb</artifactId>
+                <version>${spring-boot-starter-data-mongodb}</version>
             </dependency>
         </dependencies>
 

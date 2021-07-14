@@ -57,20 +57,20 @@ management:
     web:
       exposure:
         include: "*"
-ribbon:
-  ReadTimeout: 2000
-  ConnectTimeout: 2000
-  MaxAutoRetries: 0
-  MaxAutoRetriesNextServer: 1
-
-
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
+#ribbon:
+#  ReadTimeout: 2000
+#  ConnectTimeout: 2000
+#  MaxAutoRetries: 0
+#  MaxAutoRetriesNextServer: 1
+#
+#
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 10000
 
 zuul:
   routes:
