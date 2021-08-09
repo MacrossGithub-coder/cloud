@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="AppleStore" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -82,7 +82,7 @@
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV 数据文件设置" enabled="true">
             <stringProp name="delimiter">,</stringProp>
             <stringProp name="fileEncoding">UTF-8</stringProp>
-            <stringProp name="filename">D:/Users/i_zhangjiancheng/Jmeter/csv/login.csv</stringProp>
+            <stringProp name="filename">D:/Users/MACROSS/IdeaProjects/gitee/cloud/Jmeter/csv/login.csv</stringProp>
             <boolProp name="ignoreFirstLine">false</boolProp>
             <boolProp name="quotedData">false</boolProp>
             <boolProp name="recycle">false</boolProp>
@@ -102,7 +102,7 @@
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
-            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\i_zhangjiancheng\\Jmeter\\csv\\token.csv&quot;,true);
+            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\MACROSS\\IdeaProjects\\gitee\\cloud\\Jmeter\\csv\\token.csv&quot;,true);
 BufferedWriter out = new BufferedWriter(file);
 out.write(vars.get(&quot;token&quot;)+&quot;\n&quot;);
 out.close();
@@ -113,7 +113,7 @@ file.close();</stringProp>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="提取token" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding">UTF-8</stringProp>
-          <stringProp name="filename">D:/Users/i_zhangjiancheng/Jmeter/csv/token.csv</stringProp>
+          <stringProp name="filename">D:/Users/MACROSS/IdeaProjects/gitee/cloud/Jmeter/csv/token.csv</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">false</boolProp>
@@ -210,7 +210,7 @@ file.close();</stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
-            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\i_zhangjiancheng\\Jmeter\\csv\\seckillPath.csv&quot;,true);
+            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\MACROSS\\IdeaProjects\\gitee\\cloud\\Jmeter\\csv\\seckillPath.csv&quot;,true);
 BufferedWriter out = new BufferedWriter(file);
 out.write(vars.get(&quot;seckillPath&quot;)+&quot;\n&quot;);
 out.close();
@@ -299,7 +299,7 @@ file.close();</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1000</stringProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -338,7 +338,7 @@ file.close();</stringProp>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="提取token" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding">UTF-8</stringProp>
-          <stringProp name="filename">D:/Users/i_zhangjiancheng/Jmeter/csv/token.csv</stringProp>
+          <stringProp name="filename">D:/Users/MACROSS/IdeaProjects/gitee/cloud/Jmeter/csv/token.csv</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">false</boolProp>
@@ -395,7 +395,7 @@ file.close();</stringProp>
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="提取秒杀路径" enabled="true">
             <stringProp name="delimiter">,</stringProp>
             <stringProp name="fileEncoding">UTF-8</stringProp>
-            <stringProp name="filename">D:/Users/i_zhangjiancheng/Jmeter/csv/seckillPath.csv</stringProp>
+            <stringProp name="filename">D:/Users/MACROSS/IdeaProjects/gitee/cloud/Jmeter/csv/seckillPath.csv</stringProp>
             <boolProp name="ignoreFirstLine">false</boolProp>
             <boolProp name="quotedData">false</boolProp>
             <boolProp name="recycle">false</boolProp>
@@ -409,7 +409,7 @@ file.close();</stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
-            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\i_zhangjiancheng\\Jmeter\\csv\\seckillResult.csv&quot;,true);
+            <stringProp name="script">FileWriter file = new FileWriter(&quot;D:\\Users\\MACROSS\\IdeaProjects\\gitee\\cloud\\Jmeter\\csv\\seckillResult.csv&quot;,true);
 BufferedWriter out = new BufferedWriter(file);
 out.write(vars.get(&quot;seckillResult&quot;)+&quot;\n&quot;);
 out.close();
@@ -451,7 +451,7 @@ file.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">D:\Users\i_zhangjiancheng\Jmeter\jtl\test.jtl</stringProp>
+          <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="聚合报告" enabled="true">

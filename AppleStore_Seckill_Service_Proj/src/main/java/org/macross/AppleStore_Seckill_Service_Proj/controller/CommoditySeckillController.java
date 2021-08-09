@@ -67,9 +67,10 @@ public class CommoditySeckillController {
         Integer userId = Integer.parseInt(request.getHeader("user_id"));
         log.info("Receive Request commoditySeckill, param:[userId = {},commodityId = {}]", userId, commonRequest.getCommodity_id());
         boolean lock;
-        lock = distributedLock.distributedLock(LUA_DISTRIBUTE_LOCK_PRE + "SeckillService-" + userId.toString() + "-" + commonRequest.getCommodity_id(),
-                UUID.randomUUID().toString(),
-                "5");
+        lock = distributedLock.distributedLock(LUA_DISTRIBUTE_LOCK_PRE + "SeckillService-" + userId.toString() + "-"
+                        + commonRequest.getCommodity_id(),
+                        UUID.randomUUID().toString(),
+                        "5");
         if (!lock) {
             return JsonData.buildError(-1, "5s内请勿重复请求该接口");
         }

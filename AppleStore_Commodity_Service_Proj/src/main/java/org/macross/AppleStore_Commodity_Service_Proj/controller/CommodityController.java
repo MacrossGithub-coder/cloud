@@ -30,7 +30,7 @@ public class CommodityController {
     @SentinelResource(value = "home_banner",blockHandler = "exceptionHandler",entryType = EntryType.IN)
     @RequestMapping(value = "home_banner", method = RequestMethod.GET)
     public JsonData homeBanner() {
-            log.info("Receive query home_banner");
+//            log.info("Receive query home_banner");
             List<HomeBanner> homeBannerList = commodityService.homeBanner();
             return homeBannerList != null ? JsonData.buildSuccess(homeBannerList) : JsonData.buildError("查询失败");
     }
@@ -39,7 +39,7 @@ public class CommodityController {
     @SentinelResource(value = "home_Commodity",blockHandler = "exceptionHandler",entryType = EntryType.IN)
     @RequestMapping(value = "home_Commodity", method = RequestMethod.GET)
     public JsonData homeCommodity() {
-            log.info("Receive query home_Commodity");
+//            log.info("Receive query home_Commodity");
             List<CommodityCategory> commodityCategoryList = commodityService.homeCommodity();
             return commodityCategoryList != null ? JsonData.buildSuccess(commodityCategoryList) : JsonData.buildError("查询失败");
     }

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.macross.AppleStore_Common_Config.model.entity.CommodityOrder;
+import org.macross.AppleStore_Common_Config.model.entity.CommoditySeckill;
 import org.macross.AppleStore_Common_Config.model.entity.SeckillOrder;
 import org.macross.AppleStore_Seckill_Service_Proj.client.AppleStoreCommodityClient;
 import org.macross.AppleStore_Seckill_Service_Proj.client.AppleStoreUserClient;
@@ -90,13 +91,22 @@ public class SeckillResultServiceImpl implements SeckillResultService {
         if (isOver != null && isOver) {
             return SeckillConstant.OUT_OF_STOCK;
         }
+        //查看Mysql商品是否库存不足
+        CommoditySeckill commoditySeckill = commoditySeckillMapper.findStockByCommodityId(commodityId);
+        if (commoditySeckill.getStock() <= 0) {
+            return SeckillConstant.OUT_OF_STOCK;
+        }
         return SeckillConstant.IN_QUEUE;
     }
 
     @Override
     public boolean resetDatabase() throws Exception {
         //Reset redis database
-        redisTemplate.opsForValue().set("21",50);
+        redisTemplate.opsForValue().set("21",10);
+        redisTemplate.opsForValue().set("22",10);
+        redisTemplate.opsForValue().set("23",10);
+        redisTemplate.opsForValue().set("18",10);
+        redisTemplate.opsForValue().set("15",10);
 
         //Truncate table & reset commodity stock
         Map<String, String> datasource = YmlUtils.getYmlByFileName("classpath:application-dev.yml", "spring", "datasource");

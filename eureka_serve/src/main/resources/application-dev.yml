@@ -3,6 +3,9 @@ server:
 eureka:
   instance:
     hostname: localhost
+    lease-renewal-interval-in-seconds: 4
+    lease-expiration-duration-in-seconds: 12
+#    https://www.cnblogs.com/zhangs1986/p/10529815.html refresh instance time.
   client:
     register-with-eureka: false
     fetch-registry: false

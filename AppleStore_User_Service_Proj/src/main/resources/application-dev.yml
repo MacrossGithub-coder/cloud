@@ -5,6 +5,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+      fetch-registry: true
+      registry-fetch-interval-seconds: 3
+  instance:
+      lease-renewal-interval-in-seconds: 4
+      lease-expiration-duration-in-seconds: 12
 
 spring:
   application:
@@ -91,6 +96,15 @@ management:
     web:
       exposure:
         include: "*"
+
+
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 60000 # 熔断超时时长：6000ms
 
 #MyBatis
 mybatis:

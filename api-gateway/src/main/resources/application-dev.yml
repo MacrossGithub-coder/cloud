@@ -51,17 +51,18 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-    registry-fetch-interval-seconds: 3
+    registry-fetch-interval-seconds: 2
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-ribbon:
-  ReadTimeout: 2000
-  ConnectTimeout: 2000
-  MaxAutoRetries: 0
-  MaxAutoRetriesNextServer: 1
+#ribbon:
+#  ReadTimeout: 2000
+#  ConnectTimeout: 2000
+#  MaxAutoRetries: 0
+#  MaxAutoRetriesNextServer: 1
 
 
 hystrix:
@@ -71,6 +72,14 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 10000
+
+
+ribbon:
+  ConnectTimeout: 10000 # 连接超时时间(ms)
+  ReadTimeout: 10000 # 通信超时时间(ms)
+  OkToRetryOnAllOperations: true # 是否对所有操作重试
+  MaxAutoRetriesNextServer: 2 # 同一服务不同实例的重试次数
+  MaxAutoRetries: 1 # 同一实例的重试次数
 
 zuul:
   routes:
@@ -89,3 +98,7 @@ zuul:
   ignored-patterns: /*-service/**
   semaphore:
     max-semaphores: 60000
+  host:
+    connect-timeout-millis: 5000
+    socket-timeout-millis: 5000
+  retryable: true

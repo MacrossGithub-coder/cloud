@@ -6,6 +6,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+      fetch-registry: true
+      registry-fetch-interval-seconds: 3
+  instance:
+    lease-renewal-interval-in-seconds: 4
+    lease-expiration-duration-in-seconds: 12
+
+
+
 
 spring:
   application:

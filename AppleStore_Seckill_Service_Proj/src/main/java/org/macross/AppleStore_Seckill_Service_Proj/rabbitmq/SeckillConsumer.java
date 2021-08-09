@@ -38,7 +38,7 @@ public class SeckillConsumer {
         ObjectMapper objectMapper = new ObjectMapper();
         SeckillMessage seckillMessage = objectMapper.readValue(data.getBytes(), SeckillMessage.class);
         CommoditySeckill commoditySeckill = commoditySeckillMapper.findStockByCommodityId(seckillMessage.getCommodityId());
-        if (commoditySeckill.getStock() < 0) {
+        if (commoditySeckill.getStock() <= 0) {
             log.info("商品库存不足。");
             return;
         }
