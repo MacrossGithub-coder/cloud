@@ -13,11 +13,12 @@
 <!--             create_time	datetime	创建时间-->
 
     <insert id="register" parameterType="User">
-        insert into user(name,pwd,head_img,phone,account,address,create_time)
+        insert into user(name,pwd,head_img,phone,e_mail,account,address,create_time)
         values(#{name,jdbcType=VARCHAR},
                #{pwd,jdbcType=VARCHAR},
                #{headImg,jdbcType=VARCHAR},
                #{phone,jdbcType=VARCHAR},
+               #{e_mail,jdbcType=VARCHAR},
                #{account,jdbcType=DECIMAL},
                #{address,jdbcType=VARCHAR},
                #{createTime,jdbcType=TIMESTAMP})

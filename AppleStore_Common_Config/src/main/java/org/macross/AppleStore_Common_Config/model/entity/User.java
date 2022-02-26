@@ -38,6 +38,8 @@ public class User implements Serializable {
 
     private String phone;
 
+    private String e_mail;
+
     private BigDecimal account;
 
     private String address;

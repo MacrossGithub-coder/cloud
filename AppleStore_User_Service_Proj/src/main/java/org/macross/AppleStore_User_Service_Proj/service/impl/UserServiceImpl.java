@@ -5,6 +5,10 @@ import org.macross.AppleStore_Common_Config.model.entity.User;
 import org.macross.AppleStore_Common_Config.model.request.LoginRequest;
 import org.macross.AppleStore_Common_Config.model.request.RegisterRequest;
 import org.macross.AppleStore_User_Service_Proj.mapper.UserMapper;
+import org.macross.AppleStore_User_Service_Proj.observer.RegNotificationObserver;
+import org.macross.AppleStore_User_Service_Proj.observer.RegPromotionObserver;
+import org.macross.AppleStore_User_Service_Proj.observer.UserObserverController;
+import org.macross.AppleStore_User_Service_Proj.observer.UserRegistration;
 import org.macross.AppleStore_User_Service_Proj.service.UserService;
 import org.macross.AppleStore_User_Service_Proj.utils.CommonsUtils;
 import org.macross.AppleStore_User_Service_Proj.utils.JWTUtils;
@@ -20,11 +24,23 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
+
+    private static final UserObserverController  userObserverController = new  UserObserverController();
+
+    static {
+        List<Object> observers = new ArrayList<>();
+        //add observers
+        observers.add(new RegNotificationObserver());
+        observers.add(new RegPromotionObserver());
+        userObserverController.setRegObservers(observers);
+    }
+
     @Autowired
     UserMapper userMapper;
 
     @Autowired
     private RedisUtil redisUtil;
+
 
     @Autowired
     @Qualifier("redisTemplateMaster")
@@ -42,8 +58,10 @@ public class UserServiceImpl implements UserService {
             user.setAddress("中国");//初始地址为中国
             user.setHeadImg(getRandomImg());
             user.setCreateTime(new Date());
-
-            return userMapper.register(user);
+            user.setE_mail(registerRequest.getEmail());
+            int userId = userMapper.register(user);
+            userObserverController.register(new UserRegistration(user.getName(),user.getPhone(),user.getE_mail()));
+            return userId;
         }
         return -1;
 
