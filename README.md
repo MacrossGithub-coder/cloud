@@ -1,3 +1,4 @@
+* Gitee网址:https://gitee.com/macross_af/cloud
 * Swagger网关文档：http://localhost:9000/swagger-ui.html
 * RabbitMQ管理界面：http://112.124.18.163:15672/
 * 注册中心Eureka：http://localhost:8761/
